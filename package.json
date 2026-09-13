@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npx @opennextjs/cloudflare build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "preview": "npx wrangler dev",
-    "deploy": "npx wrangler pages deploy .vercel/output/static"
+    "preview": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "pages:deploy": "wrangler pages deploy ./out"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.0",
