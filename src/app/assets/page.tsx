@@ -70,7 +70,7 @@ export default function AssetsPage() {
           </div>
         )}
 
-        {assets && assets.length === 0 && (
+        {!loading && assets && assets.length === 0 && (
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
             <p className="text-yellow-700">ไม่พบข้อมูล — ยังไม่ได้ import ข้อมูลลง master_machine</p>
           </div>
