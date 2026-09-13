@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +16,7 @@ interface Asset {
 }
 
 async function getAssets(): Promise<{ data: Asset[] | null; error: string | null }> {
+  const supabase = getSupabase();
   const { data, error } = await supabase
      .from("v_parent_assets")
 	  .select("*")
