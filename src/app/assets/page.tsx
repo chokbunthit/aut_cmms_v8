@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { getSupabase } from "@/lib/supabase";
 
 interface Asset {
@@ -13,23 +16,35 @@ interface Asset {
   image_url: string;
 }
 
-async function getAssets(): Promise<{ data: Asset[] | null; error: string | null }> {
-  const supabase = getSupabase();
-  const { data, error } = await supabase
-     .from("v_parent_assets")
-	  .select("*")
-	  .order("asset_code")
-	  .limit(100);
+export default function AssetsPage() {
+  const [assets, setAssets] = useState<Asset[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    async function loadAssets() {
+      try {
+        const supabase = getSupabase();
+        const { data, error } = await supabase
+          .from("v_parent_assets")
+          .select("*")
+          .order("asset_code")
+          .limit(100);
 
-  if (error) {
-    return { data: null, error: error.message };
-  }
-  return { data, error: null };
-}
+        if (error) {
+          setError(error.message);
+        } else {
+          setAssets(data as Asset[]);
+        }
+      } catch (err: any) {
+        setError(err.message || "Failed to load assets");
+      } finally {
+        setLoading(false);
+      }
+    }
 
-export default async function AssetsPage() {
-  const { data: assets, error } = await getAssets();
+    loadAssets();
+  }, []);
 
   return (
     <main className="min-h-screen p-8">
@@ -38,6 +53,13 @@ export default async function AssetsPage() {
           <h1 className="text-3xl font-bold text-gray-900">Asset List</h1>
           <p className="text-gray-500 mt-1">ทดสอบเชื่อมต่อ Supabase PostgreSQL</p>
         </div>
+
+        {loading && (
+          <div className="flex items-center justify-center p-12 bg-white rounded-xl border border-gray-200 shadow-sm mb-6">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <span className="ml-3 text-gray-600">กำลังโหลดข้อมูล assets จาก Supabase...</span>
+          </div>
+        )}
 
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
