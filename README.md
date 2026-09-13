@@ -21,18 +21,20 @@ npm run dev
 
 เปิด http://localhost:3000/assets เพื่อทดสอบ
 
-## Deploy ไป Cloudflare Pages
+## Deploy ไป Cloudflare (Static Export)
 
 ```bash
-# Build
-npm run pages:build
+# Build (ส่งออกไฟล์ static ไปที่ ./out)
+npm run build
 
-# Deploy
+# ทดสอบรัน local preview ด้วย Wrangler
+npm run preview
+
+# Deploy ไปยัง Cloudflare Workers Static Assets
+npm run deploy
+
+# หรือหากต้องการ Deploy ผ่าน Cloudflare Pages
 npm run pages:deploy
-
-# ตั้ง environment variables บน Cloudflare
-npx wrangler pages secret put NEXT_PUBLIC_SUPABASE_URL
-npx wrangler pages secret put NEXT_PUBLIC_SUPABASE_ANON_KEY
 ```
 
 ## Structure
