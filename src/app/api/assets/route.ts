@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 
+export const runtime = "edge";
+
 export async function GET() {
   const supabase = getSupabase();
   const { data, error } = await supabase

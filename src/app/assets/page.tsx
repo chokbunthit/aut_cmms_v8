@@ -1,5 +1,7 @@
 import { getSupabase } from "@/lib/supabase";
 
+export const runtime = "edge";
+
 export const dynamic = "force-dynamic";
 
 interface Asset {
