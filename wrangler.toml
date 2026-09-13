@@ -1,0 +1,14 @@
+NAME = "aut-cmms-v8"
+COMPATIBILITY_DATE = "2024-09-23"
+COMPATIBILITY_FLAGS = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "production"
+
+# [vars]
+# NEXT_PUBLIC_SUPABASE_URL = "https://xxx.supabase.co"
+# NEXT_PUBLIC_SUPABASE_ANON_KEY = "xxx"
+
+# ใช้ wrangler secret สำหรับค่าที่ sensitive:
+# npx wrangler pages secret put NEXT_PUBLIC_SUPABASE_URL
+# npx wrangler pages secret put NEXT_PUBLIC_SUPABASE_ANON_KEY
