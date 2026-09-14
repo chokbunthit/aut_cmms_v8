@@ -7,5 +7,9 @@
   "assets": {
     "directory": "./out",
     "not_found_handling": "single-page-application"
+  },
+  "vars": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://pfcacqxonodjrnvreixq.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBmY2FjcXhvbm9kanJudnJlaXhxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkwODc4MzQsImV4cCI6MjEwNDY2MzgzNH0.S0IPEpwTbe9p5HH9Vzp6BeNiQADvjRjt4Nt8up_IkMM"
   }
 }

@@ -1,6 +1,10 @@
 import { getSupabase } from "./lib/supabase";
 import { LiffService } from "./lib/liffService";
 
+const DEFAULT_SUPABASE_URL = "https://pfcacqxonodjrnvreixq.supabase.co";
+const DEFAULT_SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBmY2FjcXhvbm9kanJudnJlaXhxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkwODc4MzQsImV4cCI6MjEwNDY2MzgzNH0.S0IPEpwTbe9p5HH9Vzp6BeNiQADvjRjt4Nt8up_IkMM";
+
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -12,7 +16,7 @@ export default {
   async fetch(request: Request, env: any): Promise<Response> {
     const url = new URL(request.url);
 
-    // รองรับ Request มาที่ /api/liff
+    // รองรับ Request มาที่ /api/liff หรือ /api/liff/<action>
     if (url.pathname === "/api/liff" || url.pathname.startsWith("/api/liff/")) {
       if (request.method === "OPTIONS") {
         return new Response(null, { status: 204, headers: CORS_HEADERS });
@@ -22,11 +26,13 @@ export default {
         const supabaseUrl =
           env?.NEXT_PUBLIC_SUPABASE_URL ||
           env?.SUPABASE_URL ||
-          process.env.NEXT_PUBLIC_SUPABASE_URL;
+          process.env.NEXT_PUBLIC_SUPABASE_URL ||
+          DEFAULT_SUPABASE_URL;
         const supabaseKey =
           env?.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
           env?.SUPABASE_ANON_KEY ||
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+          DEFAULT_SUPABASE_ANON_KEY;
 
         const supabase = getSupabase(supabaseUrl, supabaseKey);
         const service = new LiffService(supabase);
@@ -38,7 +44,7 @@ export default {
           try {
             const text = await request.text();
             if (text) payload = JSON.parse(text);
-          } catch (e) {
+          } catch {
             payload = {};
           }
           action = payload.action || "";
@@ -47,6 +53,13 @@ export default {
           url.searchParams.forEach((val, key) => {
             if (key !== "action") payload[key] = val;
           });
+        }
+
+        // รองรับการเรียกแบบ Subpath เช่น /api/liff/getMachines
+        const pathRemainder = url.pathname.replace(/^\/api\/liff\/?/, "");
+        const pathAction = pathRemainder ? pathRemainder.split("/")[0] : "";
+        if (!action && pathAction) {
+          action = pathAction;
         }
 
         if (!action) {
