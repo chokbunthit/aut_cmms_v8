@@ -19,7 +19,11 @@ const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 console.log("Connecting to Supabase at:", supabaseUrl);
-const supabase = createClient(supabaseUrl, supabaseKey);
+class DummyWS {}
+const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: { persistSession: false },
+  realtime: { transport: DummyWS }
+});
 
 async function runTests() {
   console.log("\n--- TEST 1: Check master_machine ---");

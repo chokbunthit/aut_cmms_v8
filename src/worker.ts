@@ -35,7 +35,18 @@ export default {
           DEFAULT_SUPABASE_ANON_KEY;
 
         const supabase = getSupabase(supabaseUrl, supabaseKey);
-        const service = new LiffService(supabase);
+        const lineToken =
+          env?.LINE_CHANNEL_ACCESS_TOKEN ||
+          env?.LINE_ACCESS_TOKEN ||
+          process.env.LINE_CHANNEL_ACCESS_TOKEN ||
+          process.env.LINE_ACCESS_TOKEN;
+        const lineTargetId =
+          env?.LINE_NOTIFY_TARGET_ID ||
+          env?.USER_ID ||
+          process.env.LINE_NOTIFY_TARGET_ID ||
+          process.env.USER_ID;
+
+        const service = new LiffService(supabase, lineToken, lineTargetId);
 
         let action = "";
         let payload: Record<string, any> = {};
